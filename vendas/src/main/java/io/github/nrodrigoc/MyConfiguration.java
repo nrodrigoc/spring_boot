@@ -14,9 +14,7 @@ public class MyConfiguration {
 
     @Bean
     public CommandLineRunner executar() {
-        return args -> {
-            System.out.println("RODANDO A CONFIG DE DESENVOLVIMENTO");
-        };
+        return args -> System.out.println("RODANDO A CONFIG DE DESENVOLVIMENTO");
     }
 
 
