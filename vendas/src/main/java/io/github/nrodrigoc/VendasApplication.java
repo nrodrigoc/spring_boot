@@ -1,7 +1,8 @@
 package io.github.nrodrigoc;
 
 import io.github.nrodrigoc.domain.entity.Cliente;
-import io.github.nrodrigoc.domain.repository.Clientes;
+//import io.github.nrodrigoc.domain.repository.ClientesRepository;
+import io.github.nrodrigoc.domain.service.ClientesServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,36 +17,41 @@ import java.util.List;
 public class VendasApplication {
 
     @Bean
-    public CommandLineRunner init(@Autowired Clientes clientes) { // @Autowired no parametro para referenciar o repository
+    public CommandLineRunner init(@Autowired ClientesServiceImpl cls) { // @Autowired no parametro para referenciar o repository
         return args -> {
 
-//            clientes.salvar(new Cliente("Mauro"));
+            cls.save(new Cliente("Mauro"));
 
-//            clientes.salvar(new Cliente("Patricia"));
+            cls.save(new Cliente("Patricia"));
+
+            cls.save(new Cliente("maria"));
 
             System.out.println("Lista de todos no BD");
-            List<Cliente> todosClientes = clientes.obterTodos();
+            List<Cliente> todosClientes = cls.findAll();
             todosClientes.forEach(System.out::println);
 
-            clientes.deletar(1);
-            System.out.println("\nClientes apos deletar o id 1");
-            todosClientes = clientes.obterTodos();
-            todosClientes.forEach(System.out::println);
+            // Verificando se existe um cliente chamado "Patricia"
+            System.out.println("\nA entidade Patricia existe? R:" + cls.existsByNomeIgnoreCase("patricia"));
+
+//            cls.deleteById(1);
+//            System.out.println("\nClientes apos deletar o id 1");
+//            todosClientes = cls.findAll();
+//            todosClientes.forEach(System.out::println);
 
             System.out.println("\nRetorno de busca por nome utilizando a letra 'a':");
-            clientes.buscaPorNome("a").forEach(System.out::println);
+            cls.findByNomeLike("a").forEach(System.out::println);
 
             System.out.println("\nApós adicionar um novo cliente");
-            clientes.salvar(new Cliente("Celestino"));
-            todosClientes = clientes.obterTodos();
+            cls.save(new Cliente("Celestino"));
+            todosClientes = cls.findAll();
             todosClientes.forEach(System.out::println);
 
             System.out.println("\nAtualizando uma cliente chamada \"maria\" por \"Maria Atualizada\":");
-            clientes.buscaPorNome("maria").forEach(c -> {
+            cls.findByNomeLike("maria").forEach(c -> {
                 c.setNome("Maria Atualizada");
-                clientes.atualizar(c);
+                cls.save(c);
             });
-            todosClientes = clientes.obterTodos();
+            todosClientes = cls.findAll();
             todosClientes.forEach(System.out::println);
 
 
