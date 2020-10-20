@@ -2,6 +2,7 @@ package io.github.nrodrigoc.domain.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity //Utilizando o JPA para fazer injeçao no BD
 public class Cliente {
@@ -9,6 +10,12 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) // Gerar automaticamente os id's dos clientes
     private Integer id;
+
+    //Relacao do cliente com seus pedidos, onde um cliente pode ter muitos pedidos
+    //Usamos Set e nao Collections ou List pois um pedido nao pode se repetir
+    //O parâmetro mappedBy deve conter o nome do campo que está dentro da classe Pedido
+    @OneToMany(mappedBy = "cliente")
+    private Set<Pedido> pedidos;
 
 //    @NotBlank //Impede a criacao de uma entidade com esse campo null
     @Column(length = 100, nullable = false) // Usado para referenciar a coluna na tabela
@@ -41,6 +48,14 @@ public class Cliente {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Set<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(Set<Pedido> pedidos) {
+        this.pedidos = pedidos;
     }
 
     @Override

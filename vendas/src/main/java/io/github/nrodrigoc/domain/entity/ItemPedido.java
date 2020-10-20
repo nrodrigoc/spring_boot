@@ -1,10 +1,23 @@
 package io.github.nrodrigoc.domain.entity;
 
+import javax.persistence.*;
+
+@Entity(name = "item_pedido")
 public class ItemPedido {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private Integer pedido;
+
+    @ManyToOne
+    @JoinColumn(name = "pedido_id")
+    private Pedido pedido;
+
+    @ManyToOne
+    @JoinColumn(name = "produto_id")
     private Produto produto;
+
+    @Column
     private Integer quantidade;
 
     public Integer getId() {
@@ -15,11 +28,11 @@ public class ItemPedido {
         this.id = id;
     }
 
-    public Integer getPedido() {
+    public Pedido getPedido() {
         return pedido;
     }
 
-    public void setPedido(Integer pedido) {
+    public void setPedido(Pedido pedido) {
         this.pedido = pedido;
     }
 
