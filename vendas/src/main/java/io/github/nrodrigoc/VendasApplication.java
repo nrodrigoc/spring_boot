@@ -15,15 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class VendasApplication {
 
-    @Bean
-    public CommandLineRunner init(@Autowired ClientesRepository cr) {
-        return args ->
-        {
-            Cliente c = new Cliente("Nathan");
-            cr.save(c);
-        };
-    }
-
 //    @Bean
 //    public CommandLineRunner init(
 //            @Autowired ClientesRepository cr,

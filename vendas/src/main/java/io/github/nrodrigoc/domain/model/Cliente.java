@@ -1,5 +1,7 @@
 package io.github.nrodrigoc.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ public class Cliente {
     //Relacao do cliente com seus pedidos, onde um cliente pode ter muitos pedidos
     //Usamos Set e nao Collections ou List pois um pedido nao pode se repetir
     //O parâmetro mappedBy deve conter o nome do campo que está dentro da classe Pedido
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private Set<Pedido> pedidos;
 
