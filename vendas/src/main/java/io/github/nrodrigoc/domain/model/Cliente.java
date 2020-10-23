@@ -1,7 +1,6 @@
-package io.github.nrodrigoc.domain.entity;
+package io.github.nrodrigoc.domain.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity //Utilizando o JPA para fazer injeçao no BD

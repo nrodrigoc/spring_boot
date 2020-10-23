@@ -1,7 +1,7 @@
 package io.github.nrodrigoc.domain.repository;
 
-import io.github.nrodrigoc.domain.entity.Cliente;
-import io.github.nrodrigoc.domain.entity.Pedido;
+import io.github.nrodrigoc.domain.model.Cliente;
+import io.github.nrodrigoc.domain.model.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

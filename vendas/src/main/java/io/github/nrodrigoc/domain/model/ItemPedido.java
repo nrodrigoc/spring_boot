@@ -1,4 +1,4 @@
-package io.github.nrodrigoc.domain.entity;
+package io.github.nrodrigoc.domain.model;
 
 import javax.persistence.*;
 
