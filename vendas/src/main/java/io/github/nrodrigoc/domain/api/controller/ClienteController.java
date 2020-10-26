@@ -46,7 +46,7 @@ public class ClienteController {
         cr.findById(id)
                 .map(cliente -> {
                             cr.delete(cliente);
-                            return cliente;
+                            return Void.TYPE;
                         }
                 )
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
@@ -64,7 +64,7 @@ public class ClienteController {
             .map(clienteExistente -> { // o .map precisa retornar um objeto SEMPRE
                 cliente.setId(clienteExistente.getId());
                 cr.save(cliente);
-                return clienteExistente;
+                return Void.TYPE;
             })
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 
@@ -80,7 +80,6 @@ public class ClienteController {
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
         Example example = Example.of(filtro, matcher);
-        List<Cliente> clientes = cr.findAll(example);
 
         return cr.findAll(example);
     }

@@ -7,13 +7,16 @@ import java.math.BigDecimal;
 public class Produto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "produto_sequence")
     private Integer id;
+
+    @Column(length = 30, nullable = false)
+    private String nome;
 
     @Column(length = 100)
     private String descricao;
 
-    @Column(name = "preco_unitario")
+    @Column(name = "preco_unitario", nullable = false)
     private BigDecimal preco;
 
     public Integer getId() {
@@ -38,5 +41,13 @@ public class Produto {
 
     public void setPreco(BigDecimal preco) {
         this.preco = preco;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }

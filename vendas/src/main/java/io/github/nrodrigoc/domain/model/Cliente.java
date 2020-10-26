@@ -9,7 +9,7 @@ import java.util.Set;
 public class Cliente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // Gerar automaticamente os id's dos clientes
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cliente_sequence") // Gerar automaticamente os id's dos clientes
     private Integer id;
 
     //Relacao do cliente com seus pedidos, onde um cliente pode ter muitos pedidos
