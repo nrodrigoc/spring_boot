@@ -23,6 +23,9 @@ public class Cliente {
     @Column(length = 100, nullable = false) // Usado para referenciar a coluna na tabela
     private String nome;
 
+    @Column(length = 11)
+    private String cpf;
+
     public Cliente() { // Construtor para setar o nome depois com setName
 
     }
@@ -58,6 +61,14 @@ public class Cliente {
 
     public void setPedidos(Set<Pedido> pedidos) {
         this.pedidos = pedidos;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     @Override
