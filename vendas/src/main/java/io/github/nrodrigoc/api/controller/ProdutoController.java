@@ -1,9 +1,7 @@
-package io.github.nrodrigoc.domain.api.controller;
+package io.github.nrodrigoc.api.controller;
 
-import io.github.nrodrigoc.domain.model.Cliente;
 import io.github.nrodrigoc.domain.model.Produto;
 import io.github.nrodrigoc.domain.repository.ProdutoRepository;
-import org.jboss.jandex.VoidType;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;

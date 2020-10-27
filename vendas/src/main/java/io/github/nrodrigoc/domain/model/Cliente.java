@@ -1,11 +1,14 @@
 package io.github.nrodrigoc.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity //Utilizando o JPA para fazer injeçao no BD
+@Getter@Setter
 public class Cliente {
 
     @Id
@@ -38,38 +41,6 @@ public class Cliente {
     public Cliente(String nome) { // Construtor para criar o cliente com nome
         this.nome = nome;
     } // Construtor para criar entidade já com nome
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Set<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(Set<Pedido> pedidos) {
-        this.pedidos = pedidos;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
 
     @Override
     public String toString() {
