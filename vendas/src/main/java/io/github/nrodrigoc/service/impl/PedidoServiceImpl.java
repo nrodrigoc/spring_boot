@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +36,8 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = new Pedido();
         Cliente cliente = clientesRepository.
                 findById(dto.getCliente())
-                .orElseThrow(() -> new RegraNegocioException("Código de cliente inválido"));
+                .orElseThrow(() -> new RegraNegocioException("Código de cliente inválido: " + dto.getCliente()));
+
 
         pedido.setTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
@@ -51,6 +53,14 @@ public class PedidoServiceImpl implements PedidoService {
 
     }
 
+    @Override
+    public Optional<Pedido> obterPedidoCompleto(Integer idPedido) {
+
+        return pedidosRepository.findByIdFetchItens(idPedido);
+    }
+
+
+    //Transforma a lista de ItemPedidoDTO em ItemPedido
     private List<ItemPedido> converterItens(Pedido pedido, List<ItemPedidoDTO> itens) {
         if(itens.isEmpty()) {
             throw new RegraNegocioException("Não é possível realizar um pedido sem itens");
@@ -58,7 +68,7 @@ public class PedidoServiceImpl implements PedidoService {
 
         return itens
                 .stream() //Stream de dto's
-                .map( dto -> {
+                .map( dto -> { // Itera sobre cada elemento do array e devolve outro array
                     Integer idProduto = dto.getProduto();
                     Produto produto = produtoRepository.findById(idProduto)
                             .orElseThrow(() -> new RegraNegocioException("Código de produto inválido: " + idProduto));
