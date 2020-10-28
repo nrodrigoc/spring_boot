@@ -3,8 +3,10 @@ package io.github.nrodrigoc.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 @Entity //Utilizando o JPA para fazer injeçao no BD
@@ -23,10 +25,13 @@ public class Cliente {
     private Set<Pedido> pedidos;
 
 //    @NotBlank //Impede a criacao de uma entidade com esse campo null
-    @Column(length = 100, nullable = false) // Usado para referenciar a coluna na tabela
+    @Column(length = 100) // Usado para referenciar a coluna na tabela
+    @NotEmpty(message = "Campo nome é obrigatório")
     private String nome;
 
     @Column(length = 11)
+    @NotEmpty(message = "Campo CPF é obrigatório")
+    @CPF(message = "Informe um CPF válido")
     private String cpf;
 
     public Cliente() { // Construtor para setar o nome depois com setName

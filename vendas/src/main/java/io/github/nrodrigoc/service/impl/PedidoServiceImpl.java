@@ -11,6 +11,7 @@ import io.github.nrodrigoc.domain.repository.ClientesRepository;
 import io.github.nrodrigoc.domain.repository.ItemPedidoRepository;
 import io.github.nrodrigoc.domain.repository.PedidosRepository;
 import io.github.nrodrigoc.domain.repository.ProdutoRepository;
+import io.github.nrodrigoc.exception.PedidoNaoEncontradoException;
 import io.github.nrodrigoc.exception.RegraNegocioException;
 import io.github.nrodrigoc.service.PedidoService;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,16 @@ public class PedidoServiceImpl implements PedidoService {
     public Optional<Pedido> obterPedidoCompleto(Integer idPedido) {
 
         return pedidosRepository.findByIdFetchItens(idPedido);
+    }
+
+    @Override
+    @Transactional
+    public void atualizarStatus(Integer id, StatusPedido statusPedido) {
+        pedidosRepository.findById(id)
+                .map(pedido -> {
+                    pedido.setStatus(statusPedido);
+                    return pedidosRepository.save(pedido);
+                }).orElseThrow(() -> new PedidoNaoEncontradoException());
     }
 
 
