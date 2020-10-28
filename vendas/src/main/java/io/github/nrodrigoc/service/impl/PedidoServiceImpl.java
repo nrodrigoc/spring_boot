@@ -2,6 +2,7 @@ package io.github.nrodrigoc.service.impl;
 
 import io.github.nrodrigoc.api.dto.ItemPedidoDTO;
 import io.github.nrodrigoc.api.dto.PedidoDTO;
+import io.github.nrodrigoc.domain.enums.StatusPedido;
 import io.github.nrodrigoc.domain.model.Cliente;
 import io.github.nrodrigoc.domain.model.ItemPedido;
 import io.github.nrodrigoc.domain.model.Pedido;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -39,11 +41,22 @@ public class PedidoServiceImpl implements PedidoService {
                 .orElseThrow(() -> new RegraNegocioException("Código de cliente inválido: " + dto.getCliente()));
 
 
-        pedido.setTotal(dto.getTotal());
+//        pedido.setTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
+        pedido.setStatus(StatusPedido.REALIZADO);
 
         List<ItemPedido> itensPedidos = converterItens(pedido, dto.getItens());
+        BigDecimal precoTotal = new BigDecimal("0");
+
+        for(ItemPedido i : itensPedidos) {
+            precoTotal = precoTotal.add(
+                    i.getProduto()
+                            .getPreco()
+                            .multiply(new BigDecimal(i.getQuantidade())));
+        }
+        pedido.setTotal(precoTotal);
+
         pedidosRepository.save(pedido);
 
         itemPedidoRepository.saveAll(itensPedidos);
@@ -72,7 +85,6 @@ public class PedidoServiceImpl implements PedidoService {
                     Integer idProduto = dto.getProduto();
                     Produto produto = produtoRepository.findById(idProduto)
                             .orElseThrow(() -> new RegraNegocioException("Código de produto inválido: " + idProduto));
-
 
                     ItemPedido itemPedido = new ItemPedido();
                     itemPedido.setQuantidade(dto.getQuantidade());

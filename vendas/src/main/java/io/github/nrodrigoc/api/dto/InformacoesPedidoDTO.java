@@ -16,6 +16,7 @@ public class InformacoesPedidoDTO { // Transformada num JSON no response
     private String cpf;
     private BigDecimal total;
     private String dataPedido;
+    private String status;
     private List<InformacaoItemPedidoDTO> itens;
 
 }

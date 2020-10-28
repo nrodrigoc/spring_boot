@@ -53,11 +53,17 @@ public class PedidoController {
                 .dataPedido(pedido.getDataPedido().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .cpf(pedido.getCliente().getCpf())
                 .total(pedido.getTotal())
+                .status(pedido.getStatus().name())
                 .itens(converter(pedido.getItens()))
                 .build();
 
     }
 
+    /**
+     * Transforma cada itemPedido num objto JSON quando for mandado no response
+     * @param itens
+     * @return
+     */
     private List<InformacaoItemPedidoDTO> converter(List<ItemPedido> itens) {
         if (CollectionUtils.isEmpty(itens)) {
             return Collections.emptyList();

@@ -1,5 +1,6 @@
 package io.github.nrodrigoc.domain.model;
 
+import io.github.nrodrigoc.domain.enums.StatusPedido;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +31,10 @@ public class Pedido {
 
     @Column(scale = 2, precision = 20)
     private BigDecimal total;
+
+    @Enumerated(EnumType.STRING) //Grava o enum no BD como string
+    @Column
+    private StatusPedido status;
 
     @Override
     public String toString() {
