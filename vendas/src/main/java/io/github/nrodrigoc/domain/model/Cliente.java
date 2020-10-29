@@ -26,12 +26,12 @@ public class Cliente {
 
 //    @NotBlank //Impede a criacao de uma entidade com esse campo null
     @Column(length = 100) // Usado para referenciar a coluna na tabela
-    @NotEmpty(message = "Campo nome é obrigatório")
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String nome;
 
     @Column(length = 11)
-    @NotEmpty(message = "Campo CPF é obrigatório")
-    @CPF(message = "Informe um CPF válido")
+    @NotEmpty(message = "{campo.cpf.obrigatorio}")
+    @CPF(message = "{campo.cpf.invalido}")
     private String cpf;
 
     public Cliente() { // Construtor para setar o nome depois com setName

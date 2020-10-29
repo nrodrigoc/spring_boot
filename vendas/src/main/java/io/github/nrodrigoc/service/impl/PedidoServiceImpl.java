@@ -42,7 +42,6 @@ public class PedidoServiceImpl implements PedidoService {
                 .orElseThrow(() -> new RegraNegocioException("Código de cliente inválido: " + dto.getCliente()));
 
 
-//        pedido.setTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
         pedido.setStatus(StatusPedido.REALIZADO);
@@ -50,6 +49,7 @@ public class PedidoServiceImpl implements PedidoService {
         List<ItemPedido> itensPedidos = converterItens(pedido, dto.getItens());
         BigDecimal precoTotal = new BigDecimal("0");
 
+        //Define o preço total do pedido automaticamente
         for(ItemPedido i : itensPedidos) {
             precoTotal = precoTotal.add(
                     i.getProduto()
@@ -69,7 +69,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public Optional<Pedido> obterPedidoCompleto(Integer idPedido) {
-
         return pedidosRepository.findByIdFetchItens(idPedido);
     }
 

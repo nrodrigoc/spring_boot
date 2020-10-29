@@ -11,12 +11,12 @@ import java.util.List;
 @Getter@Setter
 public class PedidoDTO {
 
-    @NotNull(message = "Informe o código do cliente")
+    @NotNull(message = "{campo.codigo-cliente.obrigatorio}")
     private Integer cliente;
 
     private BigDecimal total;
 
-    @NotEmptyList(message = "Pedido não pode ser realizado sem itens.")
+    @NotEmptyList(message = "{campo.itens-pedido.obrigatorio}")
     private List<ItemPedidoDTO> itens;
 
 }
