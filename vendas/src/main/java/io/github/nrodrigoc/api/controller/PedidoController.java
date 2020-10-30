@@ -31,7 +31,6 @@ public class PedidoController { //As operações em BD sao todas feitas através
         this.service = service;
     }
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Integer save(@RequestBody @Valid PedidoDTO dto) {

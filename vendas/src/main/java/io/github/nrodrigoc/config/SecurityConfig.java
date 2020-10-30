@@ -36,11 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        Usuário criado em memória
-        auth.inMemoryAuthentication()
-                .passwordEncoder(passwordEncoder())
-                .withUser("nathan")
-                .password(passwordEncoder().encode("123"))
-                .roles("ADMIN", "USER");
+//        auth.inMemoryAuthentication()
+//                .passwordEncoder(passwordEncoder())
+//                .withUser("nathan")
+//                .password(passwordEncoder().encode("123"))
+//                .roles("ADMIN", "USER");
         auth
                 .userDetailsService(usuarioService)
                 .passwordEncoder(passwordEncoder());

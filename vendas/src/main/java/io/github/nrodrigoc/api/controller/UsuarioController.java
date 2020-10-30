@@ -34,4 +34,9 @@ public class UsuarioController {
         return usuarioService.salvarADM(dto);
     }
 
+    @GetMapping("/api/usuarios")
+    public UsuarioDTO getById(@RequestParam Integer id) {
+        return usuarioService.getById(id);
+    }
+
 }

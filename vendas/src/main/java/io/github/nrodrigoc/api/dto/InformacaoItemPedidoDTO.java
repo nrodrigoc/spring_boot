@@ -10,6 +10,17 @@ import java.math.BigDecimal;
 @Builder
 public class InformacaoItemPedidoDTO {
 
+    /* Formato JSON para o request body
+
+        {
+            "nomeProduto": nome,
+            "descricaoProduto": descricao,
+            "precoUnitario": preco,
+            "quantidade": quantidade
+        }
+
+     */
+
     private String nomeProduto;
     private String descricaoProduto;
     private BigDecimal precoUnitario;

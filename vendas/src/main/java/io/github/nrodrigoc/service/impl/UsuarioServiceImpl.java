@@ -3,6 +3,7 @@ package io.github.nrodrigoc.service.impl;
 import io.github.nrodrigoc.api.dto.UsuarioDTO;
 import io.github.nrodrigoc.domain.model.Usuario;
 import io.github.nrodrigoc.domain.repository.UsuarioRepository;
+import io.github.nrodrigoc.exception.UsuarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 
 @Service
@@ -53,6 +55,16 @@ public class UsuarioServiceImpl implements UserDetailsService {
         usuario.setAdmin(true);
 
         return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public UsuarioDTO getById(Integer id) {
+        return usuarioRepository.findById(id)
+                .map(usuario -> {
+                    UsuarioDTO dto = new UsuarioDTO();
+                    dto.setLogin(usuario.getLogin());
+                    return dto;
+                }).orElseThrow(() -> new UsuarioNaoEncontradoException(id));
     }
 
 }

@@ -9,7 +9,19 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Getter@Setter
-public class PedidoDTO {
+public class PedidoDTO { //Entrada de dados
+
+    /* Formato JSON do request body
+        {
+            "cliente": id,
+            "itens": [
+                {
+                    "produto": id,
+                    "quantidade": quantidade
+                }
+            ]
+        }
+     */
 
     @NotNull(message = "{campo.codigo-cliente.obrigatorio}")
     private Integer cliente;

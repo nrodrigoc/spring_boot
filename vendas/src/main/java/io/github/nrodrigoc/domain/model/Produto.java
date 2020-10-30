@@ -17,15 +17,12 @@ public class Produto {
     private Integer id;
 
     @Column(length = 30, nullable = false)
-    @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String nome;
 
     @Column(length = 100)
-    @NotEmpty(message = "{campo.descricao.obrigatorio}")
     private String descricao;
 
-    @Column(name = "preco_unitario", nullable = false)
-    @NotNull(message = "{campo.preco.obrigatorio}")
+    @Column(name = "preco_unitario")
     private BigDecimal preco;
 
 }

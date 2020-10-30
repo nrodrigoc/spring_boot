@@ -1,10 +1,12 @@
 package io.github.nrodrigoc.api.controller;
 
+import io.github.nrodrigoc.api.dto.ProdutoDTO;
 import io.github.nrodrigoc.domain.model.Produto;
 import io.github.nrodrigoc.domain.repository.ProdutoRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,7 +31,12 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Produto save(@RequestBody @Valid Produto produto) {
+    public Produto save(@RequestBody @Valid ProdutoDTO dto) {
+        Produto produto = new Produto();
+        produto.setNome(dto.getNome());
+        produto.setDescricao(dto.getDescricao());
+        produto.setPreco(dto.getPreco_unitario());
+
         return pr.save(produto);
     }
 
