@@ -3,6 +3,7 @@ package io.github.nrodrigoc.api.controller;
 import io.github.nrodrigoc.api.dto.ProdutoDTO;
 import io.github.nrodrigoc.domain.model.Produto;
 import io.github.nrodrigoc.domain.repository.ProdutoRepository;
+import io.github.nrodrigoc.exception.ProdutoNaoEncontradoException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,16 @@ public class ProdutoController {
         this.pr = pr;
     }
 
-    @GetMapping("/{id}")
-    public Produto getById(@PathVariable Integer id){
+    @GetMapping
+    public ProdutoDTO getById(@RequestParam Integer id){
         return pr.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+                .map(produto -> ProdutoDTO
+                        .builder()
+                        .nome(produto.getNome())
+                        .descricao(produto.getDescricao())
+                        .preco_unitario(produto.getPreco())
+                        .build())
+                .orElseThrow(() -> new ProdutoNaoEncontradoException(id));
     }
 
     @PostMapping
@@ -40,7 +47,7 @@ public class ProdutoController {
         return pr.save(produto);
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public List<Produto> find(Produto filtro) {
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
@@ -54,14 +61,15 @@ public class ProdutoController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestParam("id") Integer id, @RequestBody @Valid Produto produto) {
+    public void update(@RequestParam("id") Integer id, @RequestBody @Valid ProdutoDTO dto) {
         pr.findById(id)
-                .map(produtoExistente -> { // o .map precisa retornar um objeto SEMPRE
-                    produto.setId(produtoExistente.getId());
-                    pr.save(produto);
-                    return Void.TYPE;
+                .map(produtoExistente -> {
+                    produtoExistente.setNome(dto.getNome());
+                    produtoExistente.setDescricao(dto.getDescricao());
+                    produtoExistente.setPreco(dto.getPreco_unitario());
+                    return pr.save(produtoExistente);
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+                .orElseThrow(() -> new ProdutoNaoEncontradoException(id));
     }
 
     @DeleteMapping
@@ -72,7 +80,7 @@ public class ProdutoController {
                     pr.deleteById(id);
                     return Void.TYPE;
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+                .orElseThrow(() -> new ProdutoNaoEncontradoException(id));
     }
 
 }
