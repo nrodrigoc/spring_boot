@@ -1,5 +1,7 @@
 package io.github.nrodrigoc.config;
 
+import io.github.nrodrigoc.security.JwtAuthFilter;
+import io.github.nrodrigoc.security.JwtService;
 import io.github.nrodrigoc.service.impl.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,14 +10,18 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     private UsuarioServiceImpl usuarioService;
+
+    private JwtService jwtService;
 
     @Bean
     public PasswordEncoder passwordEncoder() { //Criptografar a senha do usuario
@@ -31,6 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                return false;
 //            }
 //        }
+    }
+
+    @Bean
+    public OncePerRequestFilter jwtFilter() {
+        return new JwtAuthFilter(jwtService, usuarioService);
     }
 
     @Override
@@ -65,8 +76,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .hasRole("ADMIN")
                     .anyRequest().authenticated()
                 .and()
-                    .httpBasic(); // Coloca a tela padrão de login do Spring
-
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore( jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 }

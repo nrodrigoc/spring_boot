@@ -3,6 +3,7 @@ package io.github.nrodrigoc.service.impl;
 import io.github.nrodrigoc.api.dto.UsuarioDTO;
 import io.github.nrodrigoc.domain.model.Usuario;
 import io.github.nrodrigoc.domain.repository.UsuarioRepository;
+import io.github.nrodrigoc.exception.SenhaInvalidaException;
 import io.github.nrodrigoc.exception.UsuarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -20,14 +21,34 @@ import java.util.Optional;
 public class UsuarioServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private PasswordEncoder encoder;
+
+    @Autowired
+    private UsuarioRepository repository;
+
+    @Transactional
+    public Usuario salvar(Usuario usuario){
+        return repository.save(usuario);
+    }
+
+    public UserDetails autenticar( Usuario usuario ){
+        UserDetails user = loadUserByUsername(usuario.getLogin());
+        boolean senhasBatem = encoder.matches( usuario.getSenha(), user.getPassword() );
+
+        if(senhasBatem){
+            return user;
+        }
+
+        throw new SenhaInvalidaException();
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { //Método para logar
-        Usuario usuario = usuarioRepository.findByLogin(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado na base de dados"));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Usuario usuario = repository.findByLogin(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado na base de dados."));
 
-        String[] roles = usuario.isAdmin() ? new String[]{"ADMIN", "USER"} : new String[]{"USER"};
+        String[] roles = usuario.isAdmin() ?
+                new String[]{"ADMIN", "USER"} : new String[]{"USER"};
 
         return User
                 .builder()
@@ -35,36 +56,6 @@ public class UsuarioServiceImpl implements UserDetailsService {
                 .password(usuario.getSenha())
                 .roles(roles)
                 .build();
-    }
-
-    @Transactional
-    public Usuario salvar(UsuarioDTO dto) {
-
-        Usuario usuario = new Usuario();
-        usuario.setLogin(dto.getLogin());
-        usuario.setSenha(dto.getSenha());
-
-        return usuarioRepository.save(usuario);
-    }
-
-    @Transactional
-    public Usuario salvarADM(UsuarioDTO dto) {
-        Usuario usuario = new Usuario();
-        usuario.setLogin(dto.getLogin());
-        usuario.setSenha(dto.getSenha());
-        usuario.setAdmin(true);
-
-        return usuarioRepository.save(usuario);
-    }
-
-    @Transactional
-    public UsuarioDTO getById(Integer id) {
-        return usuarioRepository.findById(id)
-                .map(usuario -> {
-                    UsuarioDTO dto = new UsuarioDTO();
-                    dto.setLogin(usuario.getLogin());
-                    return dto;
-                }).orElseThrow(() -> new UsuarioNaoEncontradoException(id));
     }
 
 }

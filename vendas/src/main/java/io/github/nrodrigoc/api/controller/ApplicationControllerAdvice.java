@@ -55,5 +55,11 @@ public class ApplicationControllerAdvice {
         return new ApiErrors(e.getMessage());
     }
 
+    @ExceptionHandler(SenhaInvalidaException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiErrors handleSenhaInvalidaException(SenhaInvalidaException e) {
+        return new ApiErrors(e.getMessage());
+    }
+
 
 }
